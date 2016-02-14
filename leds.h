@@ -10,5 +10,7 @@
 
 void initLEDs();
 
+void turnOnLED(int LED);
+
 #endif	/* LEDS_H */
 
