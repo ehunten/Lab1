@@ -31,8 +31,10 @@ volatile stateType state = run;
 int main(void)
 {
     SYSTEMConfigPerformance(10000000);
+    enableInterrupts();                   //This function is necessary to use interrupts.
     initLEDs();
     initSW2();
+    initTimer2();
     
     while(1)
     {
