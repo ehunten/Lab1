@@ -19,8 +19,9 @@
 
 void initLEDs(){
     //Initialize the appropriate pins to work with the LEDs
-    TRISGbits.TRISG12 = OUT;        //initialize LED1 - TRD1
-    TRISGbits.TRISG14 = OUT;        //initialize LED2 - TRD2
+    TRISGbits.TRISG12 = OUT;        //initialize LED1 - TRD1 - Green
+    
+    TRISGbits.TRISG14 = OUT;        //initialize LED2 - TRD2 - Red
     
     ODCGbits.ODCG12 = ENABLE;       //Enable open drain collector
     ODCGbits.ODCG14 = ENABLE;       //Same

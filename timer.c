@@ -38,13 +38,13 @@ void delayUs(unsigned int delay){
     //TODO: Create a delay using timer 2 for "delay" microseconds.
     //delays 1 ms * delay
     //TODO CHANGE TO MICROSECONDS
-      TMR2 = 0;
-      PR2 = delay*49;
-      IFS0bits.T2IF = 0;
-      T2CONbits.ON = 1;
+      TMR1 = 0;
+      PR1 = delay*49;
+      IFS0bits.T1IF = 0;
+      T1CONbits.ON = 1;
       
-      while (IFS0bits.T2IF == CLEAR) {
-        T2CONbits.ON = CLEAR;
+      while (IFS0bits.T1IF == CLEAR) {
+        T1CONbits.ON = CLEAR;
       }
      
 }
