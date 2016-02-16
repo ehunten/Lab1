@@ -31,8 +31,10 @@ volatile stateType state = run;
 int main(void)
 {
     SYSTEMConfigPerformance(10000000);
+    enableInterrupts();                   //This function is necessary to use interrupts.
     initLEDs();
     initSW2();
+    initTimer1();
     
     while(1)
     {
@@ -41,7 +43,7 @@ int main(void)
         switch (state) {
             case run: turnOnLED(GRN);
                 break;
-            case stop: turnOnLED(RED);
+            case stop: turnOnLED(GRN);
                 break;
             case db1: delayUs(5);
                       state = wait1;
@@ -53,6 +55,7 @@ int main(void)
                       state = wait2;
                 break; 
             case db4: delayUs(5);
+                      state = run;
                 break;
             case wait1:
                 break;
@@ -65,14 +68,15 @@ int main(void)
     return 0;
 }
 
-void __ISR(_CHANGE_NOTICE_VECTOR, IPL3SRS) _CNInterrupt(void){
+//Button Interrupt
+void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
     //TODO: Implement the interrupt to capture the press of the button
 
 
     IFS1bits.CNAIF = OFF;           //Put down the flag
 
+    PORTA;
     if (PORTAbits.RA7 == 0) {
-        initTimer1();
         switch (state) {
             case run: state = db1;
             break;
@@ -82,16 +86,12 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL3SRS) _CNInterrupt(void){
             
     }
     else if (PORTAbits.RA7 == 1) {
-        //stopTimer();
-        IEC0bits.T1IE = 0;
-        T1CONbits.ON = 0;
-        
+       
         switch (state) {
             case wait1: state = db2;
                 break;
-            case db2: state = wait2;
-                break;
             case wait2: state = db4;
+                break;
         }
     }
     
