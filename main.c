@@ -75,6 +75,7 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
 
     IFS1bits.CNAIF = OFF;           //Put down the flag
 
+    PORTA;
     if (PORTAbits.RA7 == 0) {
         switch (state) {
             case run: state = db1;
