@@ -20,13 +20,12 @@
 void initLEDs(){
     //Initialize the appropriate pins to work with the LEDs
     TRISGbits.TRISG12 = OUT;        //initialize LED1 - TRD1 - Green
-    
     TRISGbits.TRISG14 = OUT;        //initialize LED2 - TRD2 - Red
     
     ODCGbits.ODCG12 = ENABLE;       //Enable open drain collector
     ODCGbits.ODCG14 = ENABLE;       //Same
     
-    LATGbits.LATG12 = LEDOFF;       //turn LED on FIXME: turn it off 
+    LATGbits.LATG12 = LEDOFF;       //turn LED off initially
     LATGbits.LATG14 = LEDOFF;       //Same
     
 }

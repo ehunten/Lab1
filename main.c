@@ -43,7 +43,7 @@ int main(void)
         switch (state) {
             case run: turnOnLED(GRN);
                 break;
-            case stop: turnOnLED(RED);
+            case stop: turnOnLED(GRN);
                 break;
             case db1: delayUs(5);
                       state = wait1;
@@ -85,10 +85,7 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
             
     }
     else if (PORTAbits.RA7 == 1) {
-        //stopTimer();
-        IEC0bits.T1IE = 0;
-        T1CONbits.ON = 0;
-        
+       
         switch (state) {
             case wait1: state = db2;
                 break;
