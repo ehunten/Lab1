@@ -27,13 +27,21 @@ void initTimer1(){
     T1CONbits.ON = ENABLE;          // Turn the timer on
 }
 
+void initTimer2(){
+    TMR2 = 0;
+    T2CONbits.TCKPS = 0;
+    T2CONbits.TCS = 0;
+    IFS0bits.T2IF = 0;
+}
 //Uses timer 2
 void delayUs(unsigned int delay){
-    //
-      TMR2 = CLEAR;
-      PR2 = delay*PRVAL;
-      IFS0bits.T2IF = CLEAR;
-      T2CONbits.ON = ENABLE;
+    //TODO: Create a delay using timer 2 for "delay" microseconds.
+    //delays 1 ms * delay
+    //TODO CHANGE TO MICROSECONDS
+      TMR2 = 0;
+      PR2 = delay*49;
+      IFS0bits.T2IF = 0;
+      T2CONbits.ON = 1;
       
       while (IFS0bits.T2IF == CLEAR) {
         T2CONbits.ON = CLEAR;
