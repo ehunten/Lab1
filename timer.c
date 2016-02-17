@@ -39,7 +39,7 @@ void delayUs(unsigned int delay){
     //delays 1 ms * delay
     //TODO CHANGE TO MICROSECONDS
       TMR1 = 0;
-      PR1 = delay*49;
+      PR1 = delay*PRVAL;
       IFS0bits.T1IF = 0;
       T1CONbits.ON = 1;
       
