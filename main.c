@@ -41,9 +41,9 @@ int main(void)
         //TODO: Using a finite-state machine, define the behavior of the LEDs
         //Debounce the switch
         switch (state) {
-            case run: turnOnLED(GRN);
+            case run: turnOnLED(RED);
                 break;
-            case stop: turnOnLED(RED);
+            case stop: turnOnLED(GRN);
                 break;
             case db1: delayUs(5);
                       state = wait1;
