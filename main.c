@@ -43,7 +43,7 @@ int main(void)
         switch (state) {
             case run: turnOnLED(GRN);
                 break;
-            case stop: turnOnLED(GRN);
+            case stop: turnOnLED(RED);
                 break;
             case db1: delayUs(5);
                       state = wait1;

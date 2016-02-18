@@ -8,11 +8,11 @@
 #include <xc.h>
 #include "timer.h"
 
-#define PRESC256 3
+#define PRESC256 1
 #define CLEAR 0
 #define ENABLE 1
 #define DEFAULT 7
-#define PRVAL 6249
+#define PRVAL 1249
 
 
 void initTimer1(){
@@ -33,7 +33,7 @@ void initTimer2(){
     T2CONbits.TCS = 0;
     IFS0bits.T2IF = 0;
 }
-//Uses timer 2
+//Uses timer 1
 void delayUs(unsigned int delay){
     //TODO: Create a delay using timer 2 for "delay" microseconds.
     //delays 1 ms * delay
