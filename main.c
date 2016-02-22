@@ -25,8 +25,8 @@ typedef enum stateTypeEnum{
 } stateType;
 
 
-volatile stateType state = run;
-unsigned int x = 0;
+
+volatile int x = 0;
 volatile stateType state = init;
 
 
