@@ -25,7 +25,7 @@ typedef enum stateTypeEnum{
 } stateType;
 
 volatile stateType state = run;
-
+unsigned int x = 0;
 /* Please note that the configuration file has changed from lab 0.
  * the oscillator is now of a different frequency.
  */
@@ -41,7 +41,6 @@ int main(void)
     initLCD();
     clearLCD();
     
-    int i = 0;
     
     while(1)
     {
@@ -49,12 +48,14 @@ int main(void)
         //Debounce the switch
         switch (state) {
             case run: turnOnLED(GRN);
+            T1CONbits.ON = 1;
             //display LCD stuff
             clearLCD();
             printStringLCD("Running: ");
             //getTimeString();
                 break;
             case stop: turnOnLED(RED);
+            T1CONbits.ON = 0;
             clearLCD();
             printStringLCD("Stopped: ");
             //display LCD stuff
@@ -101,6 +102,7 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
         if (PORTDbits.RD6 == 0) {
             if (state == stop) {
                 state = reset;
+                x = 0;
             }
         }
     //EXTERNAL SWITCH - RUN/STOP
@@ -133,4 +135,5 @@ void __ISR(_TIMER_1_VECTOR, IPL7SRS) _T1Interrupt () {
     //This interrupt is for the timing of the stopwatch
     IFS0bits.T1IF = OFF;
     
+    x++;
 }
