@@ -12,5 +12,5 @@ void initLCD(void); //done?
 void clearLCD(void); //done?
 void moveCursorLCD(unsigned char x, unsigned char y); //done?
 void printCharLCD(char c); //Done?
-void printStringLCD(const char* s); //TODO
+void printStringLCD(const char* s); //in progress
 void testLCD(); //provided

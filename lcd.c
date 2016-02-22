@@ -104,6 +104,8 @@ void printCharLCD(char c) {
  */
  void getTimeString () {
      //turn the time into a printable string
+     //display print string "mm:ss:ff"
+     
  }
 
 /*Initialize the LCD
@@ -160,7 +162,7 @@ void printStringLCD(const char* s) {
 void clearLCD(){
    
     writeLCD(0x01, 0, 40);
-   // delayUs(1640); //delay is specified in init function
+    delayUs(1640); //delay is specified in init function
 }
 
 /*
