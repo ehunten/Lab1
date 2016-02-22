@@ -9,6 +9,7 @@
 
 #include <xc.h>
 #include <sys/attribs.h>
+#include "lcd.h"
 #include "leds.h"
 #include "interrupt.h"
 #include "switch.h"
@@ -20,7 +21,7 @@
 #define OFF 0
 
 typedef enum stateTypeEnum{
-    run, db1, db2, db3, db4, wait1, wait2, stop
+    run, db1, db2, db3, db4, wait1, wait2, stop, reset
 } stateType;
 
 volatile stateType state = run;
@@ -33,34 +34,42 @@ int main(void)
     SYSTEMConfigPerformance(10000000);
     enableInterrupts();                   //This function is necessary to use interrupts.
     initLEDs();
+    initTimer2();
+    initSW();
     initSW2();
     initTimer1();
+    initLCD();
     
     while(1)
     {
         //TODO: Using a finite-state machine, define the behavior of the LEDs
         //Debounce the switch
         switch (state) {
-            case run: turnOnLED(RED);
+            case run: turnOnLED(GRN);
+            //display LCD stuff
                 break;
-            case stop: turnOnLED(GRN);
+            case stop: turnOnLED(RED);
+            //display LCD stuff
                 break;
-            case db1: delayUs(5);
+            case db1: delayUs(50);
                       state = wait1;
                 break;
-            case db2: delayUs(5);
+            case db2: delayUs(50);
                       state = stop;
                 break;
-            case db3: delayUs(5);
+            case db3: delayUs(50);
                       state = wait2;
                 break; 
-            case db4: delayUs(5);
+            case db4: delayUs(50);
                       state = run;
                 break;
             case wait1:
                 break;
             case wait2:
-                break; 
+                break;                 
+            case reset:
+                TMR1 = 0;              //Reset TMR2
+                break;
         }
         
     }
@@ -74,8 +83,11 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
 
 
     IFS1bits.CNAIF = OFF;           //Put down the flag
+    IFS1bits.CNDIF = OFF;           // Put down the flag
 
+    //EXTERNAL SWITCH - RUN/STOP
     PORTA;
+    PORTD;
     if (PORTAbits.RA7 == 0) {
         switch (state) {
             case run: state = db1;
@@ -95,12 +107,18 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
         }
     }
     
+    //ON BOARD SWITCH - RESET
+        if (PORTDbits.RD6 == 0) {
+            if (state == stop) {
+                state = reset;
+            }
+        }
 }
 
 
 //Timer interrupt
 void __ISR(_TIMER_1_VECTOR, IPL7SRS) _T1Interrupt () {
-    
+    //This interrupt is for the timing of the stopwatch
     IFS0bits.T1IF = OFF;
     
 }

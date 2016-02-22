@@ -8,6 +8,7 @@
 #include <xc.h>
 #include "timer.h"
 
+#define PRESC1 0
 #define PRESC256 1
 #define CLEAR 0
 #define ENABLE 1
@@ -28,16 +29,18 @@ void initTimer1(){
 }
 
 void initTimer2(){
-    TMR2 = 0;
-    T2CONbits.TCKPS = 0;
-    T2CONbits.TCS = 0;
-    IFS0bits.T2IF = 0;
+    IFS0bits.T2IF = CLEAR;          // Put the flag down
+    TMR2 = CLEAR;                   //Clear TMR2
+    PR2 = PRVAL;                    //Set PRvalue
+    T2CONbits.TCKPS = PRESC1;       //Set prescalar
+    T2CONbits.TCS = CLEAR;          //Set Oscillator
+    IEC0bits.T2IE = ENABLE;         //enable interrupt
+    IPC1bits.T1IP = DEFAULT;        //interrupt priority
+    T2CONbits.ON = ENABLE;          //turn timer on
 }
 //Uses timer 1
 void delayUs(unsigned int delay){
-    //TODO: Create a delay using timer 2 for "delay" microseconds.
-    //delays 1 ms * delay
-    //TODO CHANGE TO MICROSECONDS
+    //Create a delay using timer 2 for "delay" microseconds.
       TMR2 = 0;
       PR2 = delay*PRVAL;
       IFS0bits.T2IF = 0;
@@ -45,6 +48,7 @@ void delayUs(unsigned int delay){
       
       while (IFS0bits.T2IF == CLEAR);
       T2CONbits.ON = CLEAR;
+      IFS0bits.T2IF = 0;
       
      
 }
