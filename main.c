@@ -21,10 +21,10 @@
 #define OFF 0
 
 typedef enum stateTypeEnum{
-    run, db1, db2, db3, db4, wait1, wait2, stop, reset
+    init, run, db00, db0, db1, db2, db3, db4,db5, wait0, wait1, wait2, wait3, stop, reset
 } stateType;
 
-volatile stateType state = run;
+volatile stateType state = init;
 
 /* Please note that the configuration file has changed from lab 0.
  * the oscillator is now of a different frequency.
@@ -41,13 +41,12 @@ int main(void)
     initLCD();
     clearLCD();
     
-    int i = 0;
-    
     while(1)
     {
-        //TODO: Using a finite-state machine, define the behavior of the LEDs
-        //Debounce the switch
+        
         switch (state) {
+            case init: printStringLCD("Ready \n 00:00:00");
+                break;
             case run: turnOnLED(GRN);
             //display LCD stuff
             clearLCD();
@@ -58,6 +57,12 @@ int main(void)
             clearLCD();
             printStringLCD("Stopped: ");
             //display LCD stuff
+                break;
+            case db00: delayUs(500);
+                state = wait0;
+                break;
+            case db0: delayUs(500);
+                state = run;
                 break;
             case db1: delayUs(500);
                       state = wait1;
@@ -71,12 +76,21 @@ int main(void)
             case db4: delayUs(500);
                       state = run;
                 break;
+            case db5: delayUs(500);
+                      state = wait3;
+                break;
+            case wait0:
+                break;
             case wait1:
                 break;
             case wait2:
-                break;                 
+                break;    
+            case wait3:
+                break;
             case reset:
-                TMR1 = 0;              //Reset TMR2
+                TMR1 = 0;
+                delayUs(500);
+                state = init;
                 break;
             default: clearLCD();
                 break;
@@ -100,6 +114,11 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
         //ON BOARD SWITCH - RESET
         if (PORTDbits.RD6 == 0) {
             if (state == stop) {
+                state = db5;
+            }
+        }
+        else if (PORTDbits.RD6 == 1) {
+            if (state == wait3) {
                 state = reset;
             }
         }
@@ -107,6 +126,8 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
 
         else if (PORTAbits.RA7 == 0) {
             switch (state) {
+                case init: state = db00;
+                break;
                 case run: state = db1;
                 break;
                 case stop: state = db3;
@@ -117,6 +138,8 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
         else if (PORTAbits.RA7 == 1) {
 
             switch (state) {
+                case wait0: state = db0;
+                    break;
                 case wait1: state = db2;
                     break;
                 case wait2: state = db4;
