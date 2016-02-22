@@ -102,10 +102,15 @@ void printCharLCD(char c) {
 /*
  *
  */
- void getTimeString () {
+ void getTimeString (unsigned int time) {
      //turn the time into a printable string
      //display print string "mm:ss:ff"
-     
+     //or with 0011 as upper bits
+     //minute string = 0b0011|minutes;
+     //writeLCD("minutes")
+     //printCharLCD(":");
+     //second string = 0b0011|seconds;
+     //writeLCD("seconds");
  }
 
 /*Initialize the LCD
