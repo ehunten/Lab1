@@ -21,7 +21,7 @@
 #define OFF 0
 
 typedef enum stateTypeEnum{
-    init, run, db00, db0, db1, db2, db3, db4,db5, wait0, wait1, wait2, wait3, stop, reset
+    init, ready, run, db00, db0, db1, db2, db3, db4,db5, wait0, wait1, wait2, wait3, stop, reset
 } stateType;
 
 volatile stateType state = init;
@@ -45,8 +45,10 @@ int main(void)
     {
         
         switch (state) {
-            case init: printStringLCD("Ready \n 00:00:00");
+            case init: state = ready;
                 break;
+            case ready: printStringLCD("Ready 00:00:00");
+            break;
             case run: turnOnLED(GRN);
             //display LCD stuff
             clearLCD();
@@ -92,8 +94,8 @@ int main(void)
                 delayUs(500);
                 state = init;
                 break;
-            default: clearLCD();
-                break;
+//            default: clearLCD();
+//                break;
         }
         
     }
@@ -106,8 +108,7 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
     //TODO: Implement the interrupt to capture the press of the button
 
 
-    IFS1bits.CNAIF = OFF;           //Put down the flag
-    IFS1bits.CNDIF = OFF;           // Put down the flag
+
     PORTA;
     PORTD;
     
@@ -146,7 +147,8 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
                     break;
             }
         }
-    
+    IFS1bits.CNAIF = OFF;           //Put down the flag
+    IFS1bits.CNDIF = OFF;           // Put down the flag
 
 }
 
