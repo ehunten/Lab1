@@ -151,7 +151,7 @@ void initLCD(void) {
 void printStringLCD(const char* s) {
     int i = 0;
     for (i = 0; s[i] != '\0'; i++) {
-        writeLCD(s[i], 1, 100);
+        writeLCD(s[i], 1, 46);
     }
     
 }

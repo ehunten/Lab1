@@ -39,6 +39,9 @@ int main(void)
     initSW2();
     initTimer1();
     initLCD();
+    clearLCD();
+    
+    int i = 0;
     
     while(1)
     {
@@ -47,20 +50,25 @@ int main(void)
         switch (state) {
             case run: turnOnLED(GRN);
             //display LCD stuff
+            clearLCD();
+            printStringLCD("Running: ");
+            //getTimeString();
                 break;
             case stop: turnOnLED(RED);
+            clearLCD();
+            printStringLCD("Stopped: ");
             //display LCD stuff
                 break;
-            case db1: delayUs(50);
+            case db1: delayUs(500);
                       state = wait1;
                 break;
-            case db2: delayUs(50);
+            case db2: delayUs(500);
                       state = stop;
                 break;
-            case db3: delayUs(50);
+            case db3: delayUs(500);
                       state = wait2;
                 break; 
-            case db4: delayUs(50);
+            case db4: delayUs(500);
                       state = run;
                 break;
             case wait1:
@@ -69,6 +77,8 @@ int main(void)
                 break;                 
             case reset:
                 TMR1 = 0;              //Reset TMR2
+                break;
+            default: clearLCD();
                 break;
         }
         
@@ -84,35 +94,37 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
 
     IFS1bits.CNAIF = OFF;           //Put down the flag
     IFS1bits.CNDIF = OFF;           // Put down the flag
-
-    //EXTERNAL SWITCH - RUN/STOP
     PORTA;
     PORTD;
-    if (PORTAbits.RA7 == 0) {
-        switch (state) {
-            case run: state = db1;
-            break;
-            case stop: state = db3;
-            break;
-        }
-            
-    }
-    else if (PORTAbits.RA7 == 1) {
-       
-        switch (state) {
-            case wait1: state = db2;
-                break;
-            case wait2: state = db4;
-                break;
-        }
-    }
     
-    //ON BOARD SWITCH - RESET
+        //ON BOARD SWITCH - RESET
         if (PORTDbits.RD6 == 0) {
             if (state == stop) {
                 state = reset;
             }
         }
+    //EXTERNAL SWITCH - RUN/STOP
+
+        else if (PORTAbits.RA7 == 0) {
+            switch (state) {
+                case run: state = db1;
+                break;
+                case stop: state = db3;
+                break;
+            }
+
+        }
+        else if (PORTAbits.RA7 == 1) {
+
+            switch (state) {
+                case wait1: state = db2;
+                    break;
+                case wait2: state = db4;
+                    break;
+            }
+        }
+    
+
 }
 
 
