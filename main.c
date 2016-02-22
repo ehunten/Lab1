@@ -34,7 +34,7 @@ int main(void)
     enableInterrupts();                   //This function is necessary to use interrupts.
     initLEDs();
     initSW2();
-    initTimer2();
+    initTimer1();
     
     while(1)
     {
@@ -74,7 +74,7 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL3SRS) _CNInterrupt(void){
     IFS1bits.CNAIF = OFF;           //Put down the flag
 
     if (PORTAbits.RA7 == 0) {
-        initTimer1();
+//        initTimer1();
         switch (state) {
             case run: state = db1;
             break;
@@ -85,15 +85,16 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL3SRS) _CNInterrupt(void){
     }
     else if (PORTAbits.RA7 == 1) {
         //stopTimer();
-        IEC0bits.T1IE = 0;
-        T1CONbits.ON = 0;
-        
+//        IEC0bits.T1IE = 0;
+//        T1CONbits.ON = 0;
+//        
         switch (state) {
             case wait1: state = db2;
                 break;
-            case db2: state = wait2;
-                break;
+//            case db2: state = wait2;
+//                break;
             case wait2: state = db4;
+                break;
         }
     }
     
@@ -101,8 +102,8 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL3SRS) _CNInterrupt(void){
 
 
 //Timer interrupt
-void __ISR(_TIMER_1_VECTOR, IPL7SRS) _T1Interrupt () {
-    
-    IFS0bits.T1IF = OFF;
-    
-}
+//void __ISR(_TIMER_1_VECTOR, IPL7SRS) _T1Interrupt () {
+//    
+//    IFS0bits.T1IF = OFF;
+//    
+//}

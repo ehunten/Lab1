@@ -9,8 +9,8 @@
 #include "leds.h"
 
 
-#define LEDON 0
-#define LEDOFF 1
+#define LEDON 1
+#define LEDOFF 0
 #define ENABLE 0
 #define OUT 0
 #define GRN 0
