@@ -21,10 +21,10 @@
 #define OFF 0
 
 typedef enum stateTypeEnum{
-    init, ready, run, db00, db0, db1, db2, db3, db4,db5, wait0, wait1, wait2, wait3, stop, reset
+    timer, ready, run, db00, db0, db1, db2, db3, db4,db5, wait0, wait1, wait2, wait3, stop, reset
 } stateType;
 
-volatile stateType state = init;
+volatile stateType state = run;
 
 /* Please note that the configuration file has changed from lab 0.
  * the oscillator is now of a different frequency.
@@ -45,26 +45,26 @@ int main(void)
     {
         
         switch (state) {
-            case init: state = ready;
-                break;
-            case ready: printStringLCD("Ready 00:00:00");
-            break;
             case run: turnOnLED(GRN);
-            //display LCD stuff
             clearLCD();
             printStringLCD("Running: ");
             //getTimeString();
+            state = timer;
                 break;
+            case timer: 
+                moveCursorLCD(0,4);
+                printStringLCD("TimerState");
+                    break;
             case stop: turnOnLED(RED);
-            clearLCD();
+            //clearLCD();
             printStringLCD("Stopped: ");
-            //display LCD stuff
                 break;
-            case db00: delayUs(500);
+            case db00: clearLCD();
+                delayUs(500);
                 state = wait0;
                 break;
             case db0: delayUs(500);
-                state = run;
+                state = stop;
                 break;
             case db1: delayUs(500);
                       state = wait1;
@@ -92,7 +92,7 @@ int main(void)
             case reset:
                 TMR1 = 0;
                 delayUs(500);
-                state = init;
+                state = run;
                 break;
 //            default: clearLCD();
 //                break;
@@ -127,7 +127,7 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void){
 
         else if (PORTAbits.RA7 == 0) {
             switch (state) {
-                case init: state = db00;
+                case timer: state = db00;
                 break;
                 case run: state = db1;
                 break;
