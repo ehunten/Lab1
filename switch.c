@@ -29,7 +29,7 @@ void initSW2(){
     TRISAbits.TRISA7 = ENABLE;      //Configure switch as input
     CNCONAbits.ON = ENABLE;         //Enable interrupt
     CNENAbits.CNIEA7 = ENABLE;      //Enable change notifications
-//    CNPUAbits.CNPUA7 = ENABLE;      //Enable pull-up resistor
+    //CNPUAbits.CNPUA7 = ENABLE;      //Enable pull-up resistor
     IFS1bits.CNAIF = OFF;           //Put down the flag
     IPC8bits.CNIP = DEFAULT;        //Configure interrupt priority
     IEC1bits.CNAIE = ENABLE;        //Enable interrupt for A pins

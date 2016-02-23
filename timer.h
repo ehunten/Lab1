@@ -9,7 +9,7 @@
 #define	INITTIMER_H
 
 void initTimer1();
-
+void timerDisplayLCD(int t);
 void delayUs(unsigned int delay);
 
 #endif	/* INITTIMER_H */

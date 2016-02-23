@@ -10,7 +10,7 @@ void writeFourBits(unsigned char word, unsigned int commandType, unsigned int de
 void getTimeString ();
 void initLCD(void); //done?
 void clearLCD(void); //done?
-void moveCursorLCD(unsigned char x, unsigned char y); //done?
+void moveCursorLCD(); //done?
 void printCharLCD(char c); //Done?
 void printStringLCD(const char* s); //in progress
 void testLCD(); //provided

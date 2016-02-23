@@ -48,39 +48,41 @@
 void writeFourBits(unsigned char word, unsigned int commandType, unsigned int delayAfter, unsigned int lower){
     //If lower is 0, write upper
     // set the commandType (RS value)
-    if (commandType == 0) {
-    LCD_RS = 0;
+    if (commandType == 0)
+    {
+        LCD_RS = 0;
     }
-    else if (commandType == 1) {
+    else if (commandType == 1)
+    {
         LCD_RS = 1;
     }
     
     switch(lower) {
         case 1:              //Lower
-    LAT_D4 = word&0x01;
-    LAT_D5 = (word >> 1)&0x01;
-    LAT_D6 = (word >> 2)&0x01;
-    LAT_D7 = (word >> 3)&0x01;
-    break;
+            LAT_D4 = word&0x01;
+            LAT_D5 = (word >> 1)&0x01;
+            LAT_D6 = (word >> 2)&0x01;
+            LAT_D7 = (word >> 3)&0x01;
+            break;
     
         case 0:              //Upper
-    LAT_D4 = (word >> 4)&0x01;
-    LAT_D5 = (word >> 5)&0x01;
-    LAT_D6 = (word >> 6)&0x01;
-    LAT_D7 = (word >> 7)&0x01;
-    break;
+            LAT_D4 = (word >> 4)&0x01;
+            LAT_D5 = (word >> 5)&0x01;
+            LAT_D6 = (word >> 6)&0x01;
+            LAT_D7 = (word >> 7)&0x01;
+            break;
     }
     
     //enable
     LCD_E = 1;
     
     //delay
-    delayUs(500); 
+    //delayUs(500); 
     
     //disable
     LCD_E = 0;
     
-    delayUs(500);
+    //delayUs(500);
     delayUs(delayAfter);
 }
 
@@ -156,7 +158,7 @@ void initLCD(void) {
 void printStringLCD(const char* s) {
     int i = 0;
     for (i = 0; s[i] != '\0'; i++) {
-        writeLCD(s[i], 1, 46);
+        writeLCD(s[i], 1, 1);
     }
     
 }
@@ -173,12 +175,8 @@ void clearLCD(){
 /*
  Use the command for changing the DD RAM address to put the cursor somewhere.
  */
-void moveCursorLCD(unsigned char x, unsigned char y){
-    unsigned char move = 0x20;
-    move |= x;
-    move |= (y >> 4);
-    
-    writeLCD(move, 0, 40);
+void moveCursorLCD(){
+    writeLCD(0b11000000, 0, 40);
 }
 
 /*
