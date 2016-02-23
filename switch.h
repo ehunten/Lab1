@@ -8,6 +8,7 @@
 #ifndef SWITCH_H
 #define	SWITCH_H
 
+void initSW();
 void initSW2();
 
 
